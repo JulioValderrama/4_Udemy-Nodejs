@@ -1,7 +1,4 @@
-var a = "Hello";
+const greet = require("./greet");
 
-const myFunc = function() {
-    console.log(a);
-}
-
-myFunc();
+greet.english();
+greet.spanish();
