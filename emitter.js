@@ -10,10 +10,10 @@ class Emitter {
         this.events[theEvent].push(listener);
     }
     // WE create a method that will take the event and will loop through the array events to call all functions (listeners) inside
-    emit(theEvent) {
+    emit(theEvent, data) {
         if (this.events[theEvent]) {
             this.events[theEvent].forEach(function (listener) {
-                listener();
+                listener(data);
             });
         };
     }
