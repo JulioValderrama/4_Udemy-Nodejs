@@ -8,6 +8,7 @@ var newSaludo = new Saludos();
 newSaludo.on("emitMessage", (data) => {
     console.log(`Listener responding to Emit event ${data}`);
 });
+//Here the functions with the argument DATA would be a CALLBACK function
 newSaludo.on("emitMessage", (data) => {
     console.log(`SECOND Listener responding to Emit event ${data}`);
 });
