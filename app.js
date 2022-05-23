@@ -12,8 +12,10 @@ var saludo = fs.readFile(__dirname + "/saludos.txt", "utf8", function(err, data)
 
 console.log("Despues de fs.readFile()")
 
+// A method that READS data from the STREAM meaning it could SEND DATA to other stream
 var copiame = fs.createReadStream(__dirname + "/copiame.txt", { encoding: "utf8", highWaterMark: 1 * 1024});
 
+// A method that WRITES data from the STREAM meaning it could RECIEVE DATA from other stream
 var copiahere = fs.createWriteStream(__dirname + "/copiahere.txt");
 
 // This listener METHOD, will be trigger once the fs.createReadStream() reads the DATA, that is why the event emitter is called "data". After this we just pass a CALLBACK function to do whatever we want with the data passed, normally called CHUNK.
