@@ -1,26 +1,22 @@
-const EventEmitter = require("events");
+"use stric";
 
-//We inherit Event Emitter properties
-class Saludos extends EventEmitter {
-    constructor() {
-        super();
-        this.saludo = "emitMessage";
-    }
-    //We create a method that EMIT with some data
-    despedida() {
-        console.log("ADIOS");
-        this.emit("emitMessage", "Julio")
-    };
-};
+const Saludos = require("./saludos");
 
 var newSaludo = new Saludos();
 
 // Then we add a LISTENER in our new object, created with the CLASS constractor, that listen to an EMIT and takes DATA
 newSaludo.on("emitMessage", (data) => {
-    console.log(data);
+    console.log(`Listener responding to Emit event ${data}`);
+});
+newSaludo.on("emitMessage", (data) => {
+    console.log(`SECOND Listener responding to Emit event ${data}`);
 });
 
-newSaludo.despedida();
+newSaludo.despedida("Julio");
+
+console.log(newSaludo.__proto__); // Firs in the chain's prototype is EventEmitter constractor we created from require
+console.log(newSaludo.__proto__.__proto__); // Second in the chain's prototype is EVENTS module we grab from require
+console.log(newSaludo.__proto__.__proto__.__proto__); // Last in the chain's prototype is Global Object 
 
 
 
