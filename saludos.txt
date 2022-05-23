@@ -1,0 +1,1 @@
+Hola todo el mundo, soy saludos.txt FILE !! Estoy siendo leido por Asynchronous method var saludo2 !!
