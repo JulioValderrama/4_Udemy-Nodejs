@@ -14,6 +14,7 @@ var compressed = fs.createWriteStream(__dirname + "/copiame.txt.gz");
 // A zlib Object that is TRANSFORM and DUPLEX STREAM, meaning that could READ from a Stream and WRITE to another Stream.
 var gzip = zlib.createGzip();
 
+console.log("From V8 before pipeline()")
 
 pipeline(readable, gzip, compressed, (err) => {
     if (err) {
@@ -31,6 +32,7 @@ pipeline(readable, writable, (err) => {
     console.log("PIPELINE from readable ---to--- writable DONE")
 });
 
+console.log("From V8 after pipeline()")
 
 
 
