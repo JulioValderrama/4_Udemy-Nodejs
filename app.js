@@ -1,35 +1,40 @@
 const fs = require("fs");
+const zlib = require("zlib");
 
-// Syncronous method will be called and the whole programm will wait for it
-var saludo2 = fs.readFileSync(__dirname + "/saludos.txt", "utf8");
+// A Stream that READS data from the STREAM meaning it could SEND DATA to other stream
+var readable = fs.createReadStream(__dirname + "/copiame.txt", { encoding: "utf8", highWaterMark: 1 * 1024});
 
-console.log(`This is syncro method: ${saludo2}`);
+// A Stream that WRITES data from the STREAM meaning it could RECIEVE DATA from other stream
+var writable = fs.createWriteStream(__dirname + "/copiahere.txt");
 
-// Here while waiting, the rest of the code will cointinue and then once the code is done, the function CALLBACK will be invoke;
-var saludo = fs.readFile(__dirname + "/saludos.txt", "utf8", function(err, data) {
-    console.log(data);
-});
+// A Stream that Writes data from other Stream.
+var compressed = fs.createWriteStream(__dirname + "/copiame.txt.gz");
 
-console.log("Despues de fs.readFile()")
+// A zlib Object that is TRANSFORM and DUPLEX STREAM, meaning that could READ from a Stream and WRITE to another Stream.
+var gzip = zlib.createGzip();
 
-// A method that READS data from the STREAM meaning it could SEND DATA to other stream
-var copiame = fs.createReadStream(__dirname + "/copiame.txt", { encoding: "utf8", highWaterMark: 1 * 1024});
+// PIPES could be invoke by READABLE Streams and send to WRITABLE Streams. It basically does the same that the .on function but RETURN the destination, in this case the Writable or Trasnform or Duplex STREAM. SO we could CHAIN more pipes
 
-// A method that WRITES data from the STREAM meaning it could RECIEVE DATA from other stream
-var copiahere = fs.createWriteStream(__dirname + "/copiahere.txt");
+// copiame.on("data", (chunk) => {
+//     // Here we are writing to the STREAM with fs.createWriteStream() method, using that chunk that qwe received from DATA event.
+//     copiahere.write(chunk);
+// });
+readable.pipe(writable);
+console.log("From readable to writable DONE")
 
-// This listener METHOD, will be trigger once the fs.createReadStream() reads the DATA, that is why the event emitter is called "data". After this we just pass a CALLBACK function to do whatever we want with the data passed, normally called CHUNK.
-copiame.on("data", (chunk) => {
-    console.log("The file has been read");
-    console.log(chunk.length);
-    // Here we are writing to the STREAM with fs.createWriteStream() method, using that chunk that qwe received from DATA event.
-    copiahere.write(chunk);
-    console.log("The file has been copied")
-});
+// Compressing or decompressing a stream (such as a file) can be accomplished by piping the source stream (READABLE) through a zlib Transform (READABLE AND WRITABLE) stream into a destination stream (WRITABLE):
+readable.pipe(gzip).pipe(compressed);
+console.log("From readable ---to--- Transform gzip ---to--- Writable compressed DONE");
 
-copiame.on("end", () => {
-    console.log("File read and closed");
-});
+// Examples
+// READABLE.pipe(WRITABLE or TRANSFORM or DUPLEX)
+// READABLE.pipe(TRANSFORM or DUPLEX).pipe(TRANSFORM or DUPLEX).pipe(WRITABLE)
+
+
+
+
+
+
 
 
 
